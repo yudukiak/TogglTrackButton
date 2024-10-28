@@ -20,10 +20,10 @@ export default function Setting() {
   const [apiToken, setApiToken] = useContext(ApiTokenContext)
 
   // 仮保存
-  const [token, setToken] = useState(null)
+  const [token, setToken] = useState(apiToken)
 
-  // ログインしているか、していないか
-  const [isLogged, setIsLogged] = useState(false)
+  // API Tokenが保存されてればログイン済みにする
+  const [isLogged, setIsLogged] = useState(apiToken ? true : false)
   // ログイン中か、そうでないか
   const [isLogging, setIsLogging] = useState(false)
   // ログインエラーが起きているか
@@ -81,11 +81,11 @@ export default function Setting() {
           id="email1"
           type="password"
           placeholder="dG9nZ2wgdHJhY2sgYXBpIHRva2Vu"
-          value={apiToken ? apiToken : ''}
+          value={token}
           required
-          helperText={isLogged || apiToken ? 'ログイン済み' : isLoginError ? 'ログインエラー' : '未ログイン'}
+          helperText={isLogged ? 'ログイン済み' : isLoginError ? `ログインエラー（${loginObject.error}）` : '未ログイン'}
           onChange={event => setToken(event.target.value)}
-          color={isLogged || apiToken ? 'success' : isLoginError ? 'failure' : 'gray'}
+          color={isLogged ? 'success' : isLoginError ? 'failure' : 'gray'}
         />
       </div>
       {
