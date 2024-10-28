@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+header {
+  -webkit-app-region: drag;
+}
+
+header > div:not(:first-child) {
+  -webkit-app-region: no-drag;
+}
+
+main {
+  height: calc(100vh - 2rem);
+}
+
+[data-testid="modal-overlay"] {
+  margin-top: 2rem;
+}

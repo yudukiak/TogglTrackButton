@@ -6,11 +6,17 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+      content="
+        default-src 'self';
+        connect-src 'self' https://api.track.toggl.com;
+        script-src 'self';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data:
+      "
     />
   </head>
 
-  <body>
+  <body class="overflow-hidden bg-gray-100 text-gray-600 dark:bg-gray-900 dark:text-gray-400">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

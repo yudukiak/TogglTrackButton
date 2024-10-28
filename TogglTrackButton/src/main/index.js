@@ -1,6 +1,8 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import https from 'https'
+
 import icon from '../../resources/icon.png?asset'
 
 function createWindow() {
@@ -72,3 +74,33 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+/**
+ * ElectronでCORSで守られているレスポンスも見れるようにする
+ * https://qiita.com/kojiro_ueda/items/980eff1779ac3847a6d8
+ */
+ipcMain.handle('fetch', async (event, { method, url, headers, body }) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      method,
+      headers: headers,
+    }
+    const req = https.request(url, options, (res) => {
+      let responseData = ''
+      res.on('data', (chunk) => (responseData += chunk))
+      res.on('end', () => {
+        try {
+          const parsedData = JSON.parse(responseData)
+          resolve({ success: true, data: parsedData })
+        } catch (parseError) {
+          // JSONパースエラー処理
+          resolve({ success: false, error: responseData })
+        }
+      })
+    })
+    req.on('error', (error) => resolve({ success: false, error: error.message }))
+    // データがある場合のみ送信
+    if (body) req.write(JSON.stringify(data))
+    req.end()
+  })
+})
