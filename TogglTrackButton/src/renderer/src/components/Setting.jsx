@@ -1,10 +1,9 @@
 import { useContext, useState } from 'react'
-import { Badge, Button, Label, TextInput } from 'flowbite-react'
+import { Button, Label, TextInput } from 'flowbite-react'
 
 import { ApiTokenContext } from './ApiToken'
 
 async function fetch(authorization) {
-
   const method = 'GET'
   const url = 'https://api.track.toggl.com/api/v9/me'
   const headers = {
