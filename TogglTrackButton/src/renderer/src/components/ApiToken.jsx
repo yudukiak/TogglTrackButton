@@ -5,7 +5,7 @@ export const ApiTokenContext = createContext()
 export const ApiTokenProvider  = ({ children }) => {
   // 設定があれば
   const localApiToken = localStorage.getItem('apiToken')
-  const [apiToken, setApiToken] = useState(localApiToken ? localApiToken : null)
+  const [apiToken, setApiToken] = useState(localApiToken ? localApiToken : '')
 
   return (
     <ApiTokenContext.Provider value={[apiToken, setApiToken]}>
