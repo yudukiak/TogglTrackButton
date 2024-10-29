@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import { Button } from 'flowbite-react'
 
 import { ApiTokenContext, ApiTokenAuthorization } from './ApiToken'
 
@@ -12,6 +13,21 @@ async function fetch(method, path, authorization) {
   // preload.jsへ
   const response = await window.api.fetch(url, options)
   return response
+}
+
+// 16進数のカラーコードを明るくまたは暗くする関数
+function adjustColorBrightness(hex, amount) {
+  let color = hex.replace('#', '');
+  if (color.length === 3) {
+    color = color.split('').map(c => c + c).join('');
+  }
+
+  const num = parseInt(color, 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + amount));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + amount));
+  const b = Math.min(255, Math.max(0, (num & 0x0000ff) + amount));
+
+  return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
 }
 
 export default function Main() {
@@ -49,13 +65,25 @@ export default function Main() {
       API Token
       <div>{apiToken}</div>
       <hr />
-      {
-        projects && projects.map((project, index) => {
-          return (
-              <p key={index}>project.name：{project.name}</p>
-          )
-        })
-      }
+      <div className="flex flex-wrap gap-4">
+        {
+          projects && projects.map((project, index) => {
+            const {color, name} = project
+            const ringColor = adjustColorBrightness(color, 60)
+            return (
+                <Button
+                  style={{
+                    backgroundColor: color,
+                    boxShadow: `0 0 0 4px ${ringColor}`, 
+                    }}
+                  key={index}
+                >
+                {project.name}
+                </Button>
+            )
+          })
+        }
+      </div>
     </main>
   )
 }
