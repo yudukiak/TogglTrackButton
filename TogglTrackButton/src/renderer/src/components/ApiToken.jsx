@@ -13,3 +13,11 @@ export const ApiTokenProvider  = ({ children }) => {
     </ApiTokenContext.Provider>
   )
 }
+
+// Authorizationを作成
+export const ApiTokenAuthorization = (token) => {
+  const uriEncodedString = encodeURIComponent(token)
+  const base64EncodedString = btoa(`${uriEncodedString}:api_token`)
+  const authorization = `Basic ${base64EncodedString}`
+  return authorization
+}
