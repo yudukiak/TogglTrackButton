@@ -10,8 +10,9 @@ async function fetch(authorization) {
     'Content-Type': 'application/json',
     'Authorization': authorization
   }
+  const options = { method, headers }
   // preload.jsへ
-  const response = await window.api.fetch(method, url, headers)
+  const response = await window.api.fetch(url, options)
   return response
 }
 

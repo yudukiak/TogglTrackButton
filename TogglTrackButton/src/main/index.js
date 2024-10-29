@@ -79,12 +79,8 @@ app.on('window-all-closed', () => {
  * ElectronでCORSで守られているレスポンスも見れるようにする
  * https://qiita.com/kojiro_ueda/items/980eff1779ac3847a6d8
  */
-ipcMain.handle('fetch', async (event, { method, url, headers, body }) => {
+ipcMain.handle('fetch', async (event, { url, options, body }) => {
   return new Promise((resolve, reject) => {
-    const options = {
-      method,
-      headers: headers,
-    }
     const req = https.request(url, options, (res) => {
       let responseData = ''
       res.on('data', (chunk) => (responseData += chunk))
