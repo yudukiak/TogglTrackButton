@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Button, Label, TextInput } from 'flowbite-react'
 
-import { ApiTokenContext } from './ApiToken'
+import { ApiTokenContext, ApiTokenAuthorization } from './ApiToken'
 
 async function fetch(authorization) {
   const method = 'GET'
@@ -20,7 +20,7 @@ export default function Setting() {
   const [apiToken, setApiToken] = useContext(ApiTokenContext)
 
   // 仮保存
-  const [token, setToken] = useState(apiToken)
+  const [inputToken, setInputToken] = useState(apiToken)
 
   // API Tokenが保存されてればログイン済みにする
   const [isLogged, setIsLogged] = useState(apiToken ? true : false)
@@ -37,9 +37,7 @@ export default function Setting() {
     // ログイン中にする
     setIsLogging(true)
     // Authorizationを作成
-    const uriEncodedString = encodeURIComponent(token)
-    const base64EncodedString = btoa(`${uriEncodedString}:api_token`)
-    const authorization = `Basic ${base64EncodedString}`
+      const authorization = ApiTokenAuthorization(inputToken)
     // APIチェック
     fetch(authorization).then(res => {
       console.log('👘 - fetch - res:', res)
@@ -55,8 +53,8 @@ export default function Setting() {
       setIsLoginError(!success)
       // Tokenを保存
       if (success) {
-        setApiToken(token)
-        localStorage.setItem('apiToken', token)
+        setApiToken(inputToken)
+        localStorage.setItem('apiToken', inputToken)
       }
     })
   }
@@ -81,10 +79,10 @@ export default function Setting() {
           id="email1"
           type="password"
           placeholder="dG9nZ2wgdHJhY2sgYXBpIHRva2Vu"
-          value={token}
+          value={inputToken}
           required
           helperText={isLogged ? 'ログイン済み' : isLoginError ? `ログインエラー（${loginObject.error}）` : '未ログイン'}
-          onChange={event => setToken(event.target.value)}
+          onChange={event => setInputToken(event.target.value)}
           color={isLogged ? 'success' : isLoginError ? 'failure' : 'gray'}
         />
       </div>
