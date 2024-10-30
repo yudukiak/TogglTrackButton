@@ -46,7 +46,7 @@ export default function Main() {
 
   return (
     <main className="grid grid-cols-2 gap-4 p-4">
-      <ProjectCard projects={projects} />
+      <ProjectCard projects={projects} currentProject={currentProject} />
       <AvatarCard me={me} />
       <TimerCard project={currentProject} />
     </main>

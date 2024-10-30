@@ -2,16 +2,26 @@ import { useContext, useEffect, useState } from 'react'
 import { Button, Card } from 'flowbite-react'
 import { ApiTokenContext, apiTokenAuthorization, fetch } from './Api'
 
-export default function ProjectCard({projects}) {
+export default function ProjectCard({ projects, currentProject }) {
   const [apiToken, setApiToken] = useContext(ApiTokenContext)
-  const [cardClassNames, setCardClassNames] = useState({})
-  const setCardBoxShadow = color => setCardClassNames({ boxShadow: `0px 0px 5px 0px ${color}` })
+  const [classNames, setClassNames] = useState({})
+
+  const updateBoxShadow = object => {
+    const color = object.color
+    if (color === undefined) return
+    const classNameObject = { 'boxShadow': `0px 0px 5px 0px ${color}` }
+    setClassNames(classNameObject)
+  }
+
+  useEffect(() => {
+    updateBoxShadow(currentProject)
+  }, [currentProject])
 
   const handleClick = project => {
     // Authorizationを作成
     const authorization = apiTokenAuthorization(apiToken)
     // APIチェック
-    const { color, id, workspace_id } = project
+    const { id, workspace_id } = project
     const body = {
       'created_with': 'API',
       'duration': -1,
@@ -19,17 +29,18 @@ export default function ProjectCard({projects}) {
       'start': new Date().toISOString().replace('Z', '+00:00'),
       'workspace_id': workspace_id
     }
-    console.log('👘 - handleClick - body:', body)
     fetch('POST', `workspaces/${workspace_id}/time_entries`, authorization, body).then(res => {
-      console.log('👘 - fetch - res:', res)
-      if (res.success) setCardBoxShadow(color)
+      if (!res.success) return
+      const currentData = res.data
+      const currentProjectData = projects.filter(p => p.id === currentData.project_id)[0]
+      updateBoxShadow(currentProjectData)
     })
   }
 
   return (
     <Card
       className="col-span-2"
-      style={cardClassNames}
+      style={classNames}
     >
       <div className="flex flex-wrap gap-4">
         {
