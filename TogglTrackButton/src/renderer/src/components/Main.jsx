@@ -3,11 +3,13 @@ import { useContext, useEffect, useState } from 'react'
 import { ApiTokenContext, apiTokenAuthorization, fetch } from './Api'
 import AvatarCard from './AvatarCard'
 import ProjectCard from './ProjectCard'
+import TimerCard from './TimerCard'
 
 export default function Main() {
   const [apiToken, setApiToken] = useContext(ApiTokenContext)
-  const [me, setMe] = useState({ email: '設定よりログインしてください', fullname:'未ログイン', image_url: ''})
+  const [me, setMe] = useState({ email: '設定よりログインしてください', fullname: '未ログイン', image_url: '' })
   const [projects, setProjects] = useState([])
+  const [currentProject, setCurrentProject] = useState({})
 
   // apiTokenに変更があった場合にfetchProjectsを実行
   useEffect(() => {
@@ -32,6 +34,11 @@ export default function Main() {
       console.log('👘 - fetchProjects - projectsData:', projectsData)
       // アンマウントされていない場合のみ更新
       if (!ignore) setProjects(projectsData)
+      // 今動いてるプロジェクトを取得
+      const { data: currentData } = await fetch('GET', 'me/time_entries/current', authorization)
+      console.log('👘 - loadProjects - currentData:', currentData)
+      const currentProjectData = projectsData.filter(p => p.id === currentData.project_id)[0]
+      setCurrentProject(currentProjectData)
     }
     loadProjects()
     return () => ignore = true
@@ -39,8 +46,9 @@ export default function Main() {
 
   return (
     <main className="grid grid-cols-2 gap-4 p-4">
-      <ProjectCard projects={projects}/>
+      <ProjectCard projects={projects} />
       <AvatarCard me={me} />
+      <TimerCard project={currentProject} />
     </main>
   )
 }
