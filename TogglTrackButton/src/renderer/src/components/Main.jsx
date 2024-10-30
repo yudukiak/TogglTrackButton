@@ -57,6 +57,7 @@ export default function Main() {
       <TimerCard
         projects={projects}
         currentProject={currentProject}
+        onCurrentProject={handleCurrentProject}
       />
     </main>
   )
