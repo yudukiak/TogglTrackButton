@@ -95,8 +95,11 @@ ipcMain.handle('fetch', async (event, { url, options, body }) => {
       })
     })
     req.on('error', (error) => resolve({ success: false, error: error.message }))
-    // データがある場合のみ送信
-    if (body) req.write(body)
+    // bodyがオブジェクトの場合はJSON文字列に変換
+    if (body) {
+      const requestBody = typeof body === 'object' ? JSON.stringify(body) : body
+      req.write(requestBody)
+    }
     req.end()
   })
 })
