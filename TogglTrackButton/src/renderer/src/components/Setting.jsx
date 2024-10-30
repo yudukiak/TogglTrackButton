@@ -24,10 +24,9 @@ export default function Setting() {
     // ログイン中にする
     setIsLogging(true)
     // Authorizationを作成
-      const authorization = apiTokenAuthorization(inputToken)
+    const authorization = apiTokenAuthorization(inputToken)
     // APIチェック
     fetch('GET', 'me', authorization).then(res => {
-      console.log('👘 - fetch - res:', res)
       // レスポンスを保存
       setLoginObject(res)
       // レスポンスで処理する
@@ -78,7 +77,6 @@ export default function Setting() {
           ? <Button isProcessing disabled>確認中</Button>
           : <Button type="submit">保存する</Button>
       }
-
     </form>
   )
 }
