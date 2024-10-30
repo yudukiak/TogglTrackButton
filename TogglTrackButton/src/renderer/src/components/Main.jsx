@@ -21,9 +21,9 @@ export default function Main() {
       const authorization = apiTokenAuthorization(apiToken)
       // ワークスペースIDを取得
       const { data: meData } = await fetch('GET', 'me', authorization)
+      console.log('👘 - fetchProjects - meData:', meData)
       // アンマウントされていない場合のみ更新
       if (!ignore) setMe(meData)
-      console.log('👘 - fetchProjects - meData:', meData)
       const workspace_id = meData.default_workspace_id
       // コンポーネントがアンマウントされていたら中断
       if (ignore) return
