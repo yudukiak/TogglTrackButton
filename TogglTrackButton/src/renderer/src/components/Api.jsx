@@ -22,7 +22,7 @@ export const apiTokenAuthorization = (token) => {
   return authorization
 }
 
-export const fetch = async (method, path, authorization) => {
+export const fetch = async (method, path, authorization, body) => {
   const url = `https://api.track.toggl.com/api/v9/${path}`
   const headers = {
     'Content-Type': 'application/json',
@@ -30,6 +30,6 @@ export const fetch = async (method, path, authorization) => {
   }
   const options = { method, headers }
   // preload.jsへ
-  const response = await window.api.fetch(url, options)
+  const response = await window.api.fetch(url, options, body)
   return response
 }
