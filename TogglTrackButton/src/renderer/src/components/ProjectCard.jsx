@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { Button, Card } from 'flowbite-react'
+import { Flowbite, Button, Card } from 'flowbite-react'
 import { ApiTokenContext, apiTokenAuthorization, fetch } from './Api'
 
 export default function ProjectCard({ projects, currentProject, onCurrentProject }) {
@@ -17,7 +17,7 @@ export default function ProjectCard({ projects, currentProject, onCurrentProject
   useEffect(() => {
     updateBoxShadow(currentProject)
   }, [currentProject])
-  
+
   const handleClick = project => {
     // Authorizationを作成
     const authorization = apiTokenAuthorization(apiToken)
@@ -37,6 +37,14 @@ export default function ProjectCard({ projects, currentProject, onCurrentProject
       onCurrentProject(currentData)
     })
   }
+  
+  const customTheme = {
+    button: {
+      inner: {
+        base: 'block items-stretch transition-all duration-200 truncate',
+      },
+    },
+  }
 
   return (
     <Card
@@ -48,13 +56,16 @@ export default function ProjectCard({ projects, currentProject, onCurrentProject
           projects.map(project => {
             const { color, id, name } = project
             return (
-              <Button
-                style={{ backgroundColor: color }}
-                key={id}
-                onClick={() => handleClick(project)}
-              >
-                {name}
-              </Button>
+              <Flowbite theme={{ theme: customTheme }}>
+                <Button
+                  className=''
+                  style={{ backgroundColor: color }}
+                  key={id}
+                  onClick={() => handleClick(project)}
+                >
+                  {name}
+                </Button>
+              </Flowbite>
             )
           })
         }
