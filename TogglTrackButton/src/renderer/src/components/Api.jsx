@@ -15,7 +15,7 @@ export const ApiTokenProvider  = ({ children }) => {
 }
 
 // Authorizationを作成
-export const ApiTokenAuthorization = (token) => {
+export const apiTokenAuthorization = (token) => {
   const uriEncodedString = encodeURIComponent(token)
   const base64EncodedString = btoa(`${uriEncodedString}:api_token`)
   const authorization = `Basic ${base64EncodedString}`

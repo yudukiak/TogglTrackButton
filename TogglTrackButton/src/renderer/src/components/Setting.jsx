@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Button, Label, TextInput } from 'flowbite-react'
 
-import { ApiTokenContext, ApiTokenAuthorization, fetch } from './Api'
+import { ApiTokenContext, apiTokenAuthorization, fetch } from './Api'
 
 export default function Setting() {
   const [apiToken, setApiToken] = useContext(ApiTokenContext)
@@ -24,7 +24,7 @@ export default function Setting() {
     // ログイン中にする
     setIsLogging(true)
     // Authorizationを作成
-      const authorization = ApiTokenAuthorization(inputToken)
+      const authorization = apiTokenAuthorization(inputToken)
     // APIチェック
     fetch('GET', 'me', authorization).then(res => {
       console.log('👘 - fetch - res:', res)

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 
-import { ApiTokenContext, ApiTokenAuthorization, fetch } from './Api'
+import { ApiTokenContext, apiTokenAuthorization, fetch } from './Api'
 import AvatarCard from './AvatarCard'
 import ProjectCard from './ProjectCard'
 
@@ -18,7 +18,7 @@ export default function Main() {
     const loadProjects = async () => {
       if (!apiToken || ignore) return
       // authorizationを作成
-      const authorization = ApiTokenAuthorization(apiToken)
+      const authorization = apiTokenAuthorization(apiToken)
       // ワークスペースIDを取得
       const { data: meData } = await fetch('GET', 'me', authorization)
       // アンマウントされていない場合のみ更新
