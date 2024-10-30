@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Button, Label, TextInput } from 'flowbite-react'
 
-import { ApiTokenContext, ApiTokenAuthorization } from './ApiToken'
+import { ApiTokenContext, ApiTokenAuthorization } from './Api'
 
 async function fetch(authorization) {
   const method = 'GET'

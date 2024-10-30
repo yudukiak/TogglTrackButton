@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 
-import { ApiTokenContext, ApiTokenAuthorization } from './ApiToken'
+import { ApiTokenContext, ApiTokenAuthorization } from './Api'
 import AvatarCard from './AvatarCard'
 import ProjectCard from './ProjectCard'
 

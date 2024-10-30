@@ -1,6 +1,6 @@
 import { Flowbite } from 'flowbite-react'
 
-import { ApiTokenProvider } from './components/ApiToken'
+import { ApiTokenProvider } from './components/Api'
 import Header from './components/Header'
 import Main from './components/Main'
 
