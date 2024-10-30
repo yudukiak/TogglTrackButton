@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
-import { Button } from 'flowbite-react'
 
 import { ApiTokenContext, ApiTokenAuthorization } from './ApiToken'
+import AvatarCard from './AvatarCard'
+import ProjectCard from './ProjectCard'
 
 async function fetch(method, path, authorization) {
   const url = `https://api.track.toggl.com/api/v9/${path}`
@@ -15,23 +16,9 @@ async function fetch(method, path, authorization) {
   return response
 }
 
-// 16進数のカラーコードを明るくまたは暗くする関数
-function adjustColorBrightness(hex, amount) {
-  let color = hex.replace('#', '');
-  if (color.length === 3) {
-    color = color.split('').map(c => c + c).join('');
-  }
-
-  const num = parseInt(color, 16);
-  const r = Math.min(255, Math.max(0, (num >> 16) + amount));
-  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + amount));
-  const b = Math.min(255, Math.max(0, (num & 0x0000ff) + amount));
-
-  return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
-}
-
 export default function Main() {
   const [apiToken, setApiToken] = useContext(ApiTokenContext)
+  const [me, setMe] = useState({ email: '設定よりログインしてください', fullname:'未ログイン', image_url: ''})
   const [projects, setProjects] = useState([])
 
   // apiTokenに変更があった場合にfetchProjectsを実行
@@ -46,6 +33,8 @@ export default function Main() {
       const authorization = ApiTokenAuthorization(apiToken)
       // ワークスペースIDを取得
       const { data: meData } = await fetch('GET', 'me', authorization)
+      // アンマウントされていない場合のみ更新
+      if (!ignore) setMe(meData)
       console.log('👘 - fetchProjects - meData:', meData)
       const workspace_id = meData.default_workspace_id
       // コンポーネントがアンマウントされていたら中断
@@ -61,29 +50,9 @@ export default function Main() {
   }, [apiToken])
 
   return (
-    <main className="w-full px-4 mx-auto max-w-7xl">
-      API Token
-      <div>{apiToken}</div>
-      <hr />
-      <div className="flex flex-wrap gap-4">
-        {
-          projects && projects.map((project, index) => {
-            const {color, name} = project
-            const ringColor = adjustColorBrightness(color, 60)
-            return (
-                <Button
-                  style={{
-                    backgroundColor: color,
-                    boxShadow: `0 0 0 4px ${ringColor}`, 
-                    }}
-                  key={index}
-                >
-                {project.name}
-                </Button>
-            )
-          })
-        }
-      </div>
+    <main className="grid grid-cols-2 gap-4 p-4">
+      <ProjectCard projects={projects}/>
+      <AvatarCard me={me} />
     </main>
   )
 }
