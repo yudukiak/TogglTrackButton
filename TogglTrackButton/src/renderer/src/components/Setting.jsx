@@ -1,20 +1,7 @@
 import { useContext, useState } from 'react'
 import { Button, Label, TextInput } from 'flowbite-react'
 
-import { ApiTokenContext, ApiTokenAuthorization } from './Api'
-
-async function fetch(authorization) {
-  const method = 'GET'
-  const url = 'https://api.track.toggl.com/api/v9/me'
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': authorization
-  }
-  const options = { method, headers }
-  // preload.jsへ
-  const response = await window.api.fetch(url, options)
-  return response
-}
+import { ApiTokenContext, ApiTokenAuthorization, fetch } from './Api'
 
 export default function Setting() {
   const [apiToken, setApiToken] = useContext(ApiTokenContext)
@@ -39,7 +26,7 @@ export default function Setting() {
     // Authorizationを作成
       const authorization = ApiTokenAuthorization(inputToken)
     // APIチェック
-    fetch(authorization).then(res => {
+    fetch('GET', 'me', authorization).then(res => {
       console.log('👘 - fetch - res:', res)
       // レスポンスを保存
       setLoginObject(res)

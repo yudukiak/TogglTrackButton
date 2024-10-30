@@ -1,20 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 
-import { ApiTokenContext, ApiTokenAuthorization } from './Api'
+import { ApiTokenContext, ApiTokenAuthorization, fetch } from './Api'
 import AvatarCard from './AvatarCard'
 import ProjectCard from './ProjectCard'
-
-async function fetch(method, path, authorization) {
-  const url = `https://api.track.toggl.com/api/v9/${path}`
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': authorization
-  }
-  const options = { method, headers }
-  // preload.jsへ
-  const response = await window.api.fetch(url, options)
-  return response
-}
 
 export default function Main() {
   const [apiToken, setApiToken] = useContext(ApiTokenContext)
