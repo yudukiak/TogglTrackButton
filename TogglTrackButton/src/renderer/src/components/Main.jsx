@@ -23,7 +23,7 @@ export default function Main() {
       const authorization = apiTokenAuthorization(apiToken)
       // ワークスペースIDを取得
       const { data: meData } = await fetch('GET', 'me', authorization)
-      console.log('👘 - fetchProjects - meData:', meData)
+      console.log('👘 - loadProjects - meData:', meData)
       // アンマウントされていない場合のみ更新
       if (!ignore) setMe(meData)
       const workspace_id = meData.default_workspace_id
@@ -31,14 +31,17 @@ export default function Main() {
       if (ignore) return
       // プロジェクトを取得
       const { data: projectsData } = await fetch('GET', `workspaces/${workspace_id}/projects`, authorization)
-      console.log('👘 - fetchProjects - projectsData:', projectsData)
+      console.log('👘 - loadProjects - projectsData:', projectsData)
       // アンマウントされていない場合のみ更新
       if (!ignore) setProjects(projectsData)
       // 今動いてるプロジェクトを取得
       const { data: currentData } = await fetch('GET', 'me/time_entries/current', authorization)
       console.log('👘 - loadProjects - currentData:', currentData)
+      // 動いてるプロジェクトがない場合は処理しない
+      if (currentData === null) return
       const currentProjectData = projectsData.filter(p => p.id === currentData.project_id)[0]
-      setCurrentProject(currentProjectData)
+      // アンマウントされていない場合のみ更新
+      if (!ignore) setCurrentProject(currentProjectData)
     }
     loadProjects()
     return () => ignore = true
